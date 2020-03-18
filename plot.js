@@ -10,8 +10,7 @@ function buildPlot() {
   	            .attr('class','select')
                 .on('change',onchange)
 
-    var options = select
-                .selectAll('option')
+    var options = select.selectAll('option')
 	              .data(idList)
                 .enter()
 	              .append('option')
