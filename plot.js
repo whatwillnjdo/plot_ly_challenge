@@ -74,6 +74,35 @@ function plotBubbleChart(filteredData) {
   Plotly.newPlot("bubble", bubbleData, bubbleLayout);
 }
 
+function plotGaugeChart(frequency) {
+  var data = [
+     {
+       domain: { x: [0, 1], y: [0, 1] },
+       value: frequency,
+       title: { text: "Belly Button Washing Frequency" },
+       type: "indicator",
+       mode: "gauge+number+delta",
+       gauge: {
+         axis: { range: [1, 9] },
+         steps: [
+           { range: [0, 1], color: "rgba(255, 255, 255, 0)" },
+           { range: [1, 2], color: "rgba(232, 226, 202, .5)" },
+           { range: [2, 3], color: "rgba(210, 206, 145, .5)" },
+           { range: [3, 4], color: "rgba(202, 209, 95, .5)" },
+           { range: [4, 5], color: "rgba(190, 205, 65, .5)" },
+           { range: [5, 6], color: "rgba(170, 202, 42, .5)" },
+           { range: [6, 7], color: "rgba(130, 174, 35, .5)" },
+           { range: [7, 8], color: "rgba(110, 154, 22, .5)" },
+           { range: [8, 9], color: "rgba(14, 127, 0, .5)" }
+         ]
+         }
+     }
+   ];
+
+  var layout = { margin: { t: 0, b: 0 } };
+  Plotly.newPlot('gauge', data, layout);
+}
+
 function buildPlot() {
 
   // Grab a reference to the dropdown select element
@@ -99,6 +128,7 @@ function buildPlot() {
     var filteredSample = [sampleNames.samples[0]];
     plotBarChart(filteredSample);
     plotBubbleChart(filteredSample);
+    plotGaugeChart(firstSample.wfreq);
 
   });
 }
@@ -111,14 +141,13 @@ function optionChanged(newSample) {
          var filteredMetaData = sampleNames.metadata.filter(record => record.id == newSample);
          populateDemographicInfo(filteredMetaData[0]);
 
-         //console.log(filteredMetaData[0].wfreq);
-
          //Get the OTU names and values
          var filteredSample = sampleNames.samples.filter(record => record.id == newSample);
          var sortedByOTUValues = filteredSample.sort((a, b) => b.sample_values - a.sample_values);
 
          plotBarChart(sortedByOTUValues);
          plotBubbleChart(filteredSample);
+         plotGaugeChart(filteredMetaData[0].wfreq);
 
        })
     };
